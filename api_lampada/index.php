@@ -36,13 +36,16 @@ try {
                 print_r(json_encode($lampCon->color("#".$_GET['color'])));
             }
             if (isset($_GET['intensity'])) {
-                //print_r(json_encode($lampCon->intensity($_GET['intensity'])));
+                print_r(json_encode($lampCon->intensity($_GET['intensity'])));
             }
             if (isset($_GET['function'])) {
-                //print_r(json_encode($lampCon->function($_GET['function'])));
+                print_r(json_encode($lampCon->function($_GET['function'])));
             }
             if (isset($_GET['turn_on_off'])) {
                 print_r(json_encode($lampCon->turn_on_off($_GET['turn_on_off'])));
+            }
+            if (isset($_GET['duration'])) {
+                print_r(json_encode($lampCon->duration($_GET['duration'])));
             }
         }
     }
