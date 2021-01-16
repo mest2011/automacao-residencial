@@ -1,10 +1,15 @@
 <?php
 class Db
 {
-    private $DB_PORT = '127.0.0.1:3306';
-    private $DB_USER = 'root';
-    private $DB_PASSWORD = 'root';
-    private $DB_DATABASE = 'IOT';
+    // private $DB_PORT = '127.0.0.1:3306';
+    // private $DB_USER = 'root';
+    // private $DB_PASSWORD = 'root';
+    // private $DB_DATABASE = 'IOT';
+
+    private $DB_PORT = '45.13.252.148:3306';
+    private $DB_USER = 'u292793146_iot';
+    private $DB_PASSWORD = 'X34xznz7a^';
+    private $DB_DATABASE = 'u292793146_iot';
 
 
 

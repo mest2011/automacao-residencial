@@ -76,7 +76,7 @@ void loop()
       if (state == 0)
       {
         changeState(state);
-        delay(5000);
+        delay(3000);
       }
       else
       {
@@ -91,6 +91,9 @@ void loop()
         else if ((String)funcao == "carrossel")
         {
           carrossel(tempo);
+        }else{
+          setColor(r, g, b);
+          delay(3000);
         }
       }
     }
