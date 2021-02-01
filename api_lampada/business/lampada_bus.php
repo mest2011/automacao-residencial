@@ -42,7 +42,7 @@ class LampadaBus extends Crud
         if ($temp_cor['r'] > 255 || $temp_cor['g'] > 255 || $temp_cor['b'] > 255 || $temp_cor['r'] < 0 || $temp_cor['g'] < 0 || $temp_cor['b'] < 0) {
             return "'Cor inválida!'";
         } else {
-            $sql = "UPDATE tb_lampadas SET cor = '{$color}', funcao = '' WHERE nome = '{$nome}'";
+            $sql = "UPDATE tb_lampadas SET cor = '{$color}' WHERE nome = '{$nome}'";
             if (parent::update($sql)) {
 
                 return "Cor alterada!";
