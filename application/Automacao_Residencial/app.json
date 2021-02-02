@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "AutomacaoResidencial",
+    "slug": "AutomacaoResidencial",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/logo_iot.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/loading.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo_iot.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.mesttech.mestiot"
+    },
+    "web": {
+      "favicon": "./assets/images/logo_iot.png"
+    },
+    "description": ""
+  }
+}
