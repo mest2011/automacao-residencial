@@ -1,2 +1,6 @@
 
 api_lampada/database/connection.php
+application/automacao-residencial/node_modules/
+application/automacao-residencial/.expo/
+application/automacao-residencial/.expo-shared/
+application/automacao-residencial/.vscode/
