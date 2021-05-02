@@ -23,6 +23,8 @@ char url[255];
 const char *url_p1 = "http://api.mesttech.com.br/iot/?name=";
 const char *url_p2 = "&status=status";
 
+const char *url_api_laravel = "http://mesttech.com.br/api/iot_api/public/api/state/id1";
+
 //Outras variaveis
 int contadorDeErros = 0;
 
@@ -51,7 +53,7 @@ void loop()
   if (WiFi.status() == WL_CONNECTED)
   {
     HTTPClient http; //Object of class HTTPClient
-    http.begin(url);
+    http.begin(url_api_laravel);
     int httpCode = http.GET();
 
     if (httpCode > 0)

@@ -8,7 +8,7 @@ import { Text } from '../components/Themed';
 
 
 export default function TabOneScreen() {
-  
+
   const nomelampada = 'rgb';
   const [isEnabled, setIsEnabled] = useState(false);
   const [funcaoAtiva, setFuncaoAtiva] = useState("");
@@ -17,21 +17,31 @@ export default function TabOneScreen() {
   const [vcolor, setColor] = useState(toHsv('#00ffe7'));
   const [intervalo, setIntervalo] = useState('20');
   const [atualizarTela, setAtualizarTela] = useState(true);
+  const [jsonStatus, setJsonStatus] = useState({
+    state: null,
+    parameters: {
+      function: null,
+      color: null,
+      time: null,
+      brightness: null
+    },
+    more: {
+      DeviceName: "RGB"
+    }
+  });
 
   useEffect(() => {
-    //console.error(`Estado da variavel atualizar tela: ${atualizarTela}`);
-
     if (atualizarTela) {
-      getStatusAtual();
+      getStatusAtual(false);
       setAtualizarTela(false);
     }
-  }); 
+  });
 
 
-  
-  const getStatusAtual = async () => {
+
+  const getStatusAtual = async (atualizar = true) => {
     try {
-      let res = await fetch(`http://api.mesttech.com.br/iot/?name=${nomelampada}&function=status`, {
+      let res = await fetch(`http://mesttech.com.br/api/iot_api/public/api/state/1`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -39,11 +49,16 @@ export default function TabOneScreen() {
         },
       });
       res = await res.json();
-      console.log(res['funcao']);
-      setIsEnabled(Boolean(Number(res['status'])));
-      setFuncaoAtiva(res['funcao']);
-      setOldColor(res['cor']);
-      setIntervalo(res['tempo']);
+      if (atualizar) {
+        console.log(res['defined_parameters']['function']);
+        setIsEnabled(Boolean(Number(res['state'])));
+        setFuncaoAtiva(res['defined_parameters']['function']);
+        setOldColor(res['defined_parameters']['color']);
+        setIntervalo(res['defined_parameters']['time']);
+      }
+
+
+
     } catch (e) {
       console.error(e);
     }
@@ -56,17 +71,22 @@ export default function TabOneScreen() {
   }
 
   const onPressOnOff = async (value: any) => {
+    let tempValue = value;
     try {
-      setIsEnabled(previousState => !previousState);
-      let res = await fetch(`http://api.mesttech.com.br/iot/?name=${nomelampada}&turn_on_off=${!value ? 1 : 0}`, {
-        method: 'POST',
+      let temp = { ...jsonStatus };
+      temp['state'] = (!tempValue ? 1 : 0).toString();
+      console.log(temp);
+      setJsonStatus(temp);
+      let res = await fetch(`http://mesttech.com.br/api/iot_api/public/api/state/1`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(jsonStatus),
       });
       res = await res.json();
-      console.log(res)
+      setIsEnabled(Boolean(Number(res['state'])));
     } catch (e) {
       console.error(e);
     }
@@ -78,14 +98,18 @@ export default function TabOneScreen() {
   }
 
   const changeFunction = async (value: any) => {
-
+    let tempValue = value;
     try {
-      let res = await fetch(`http://api.mesttech.com.br/iot/?name=${nomelampada}&function=${value}`, {
-        method: 'POST',
+      let temp = { ...jsonStatus };
+      temp['parameters']['function'] = tempValue;
+      setJsonStatus(temp);
+      let res = await fetch(`http://mesttech.com.br/api/iot_api/public/api/state/1`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(jsonStatus)
       });
       res = await res.json();
       console.log(res)
@@ -95,35 +119,49 @@ export default function TabOneScreen() {
   }
 
   const saveColor = async () => {
+    let tempRgbcolor = rgbcolor;
+    //await getStatusAtual();
     try {
       setOldColor(`#${rgbcolor}`);
-      let res = await fetch(`http://api.mesttech.com.br/iot/?name=${nomelampada}&color=${rgbcolor}`, {
-        method: 'POST',
+      let temp = { ...jsonStatus };
+      temp['parameters']['color'] = `#${tempRgbcolor}`;
+      setJsonStatus(temp);
+      let res = await fetch(`http://mesttech.com.br/api/iot_api/public/api/state/1`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(jsonStatus)
       });
       res = await res.json();
       console.log(rgbcolor);
-      console.log(res)
+      console.log(res);
+      //setRgbColor(tempRgbcolor);
     } catch (e) {
       console.error(e);
     }
   }
 
   const salvaIntervalo = async () => {
+    let tempintervalo = intervalo;
+    await getStatusAtual();
     try {
-      let res = await fetch(`http://api.mesttech.com.br/iot/?name=${nomelampada}&duration=${intervalo}`, {
-        method: 'POST',
+      let temp = { ...jsonStatus };
+      temp['parameters']['time'] = tempintervalo;
+      setJsonStatus(temp);
+      let res = await fetch(`http://mesttech.com.br/api/iot_api/public/api/state/1`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify(jsonStatus)
       });
       res = await res.json();
       console.log(rgbcolor);
-      console.log(res)
+      console.log(res);
+      setIntervalo(tempintervalo);
     } catch (e) {
       console.error(e);
     }
@@ -155,12 +193,12 @@ export default function TabOneScreen() {
               />
             </View>
 
-            <View style={{ minWidth: 30,  alignContent: 'flex-end', marginStart: 'auto'}}>
+            <View style={{ minWidth: 30, alignContent: 'flex-end', marginStart: 'auto' }}>
               <TouchableOpacity
                 style={{
                   borderRadius: 10, backgroundColor: "#7DCAC2", alignItems: "center", paddingTop: 1, padding: 5
                 }}
-                onPress={() => {getStatusAtual()}}>
+                onPress={() => { getStatusAtual() }}>
                 <Text style={{ color: "black" }}>↺</Text>
               </TouchableOpacity>
             </View>
@@ -200,11 +238,11 @@ export default function TabOneScreen() {
               <Picker.Item label="Pulsante" value="fade" />
             </Picker>
             {['carrossel', 'blink', 'fade'].includes(funcaoAtiva) && (
-              <View style={{alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Slider
                   value={parseInt(intervalo, 10)}
                   step={5}
-                  style={{ height: 40 , width: '100%'}}
+                  style={{ height: 40, width: '100%' }}
                   minimumValue={20}
                   maximumValue={200}
                   onValueChange={value => { alteraIntervalo(value) }}
